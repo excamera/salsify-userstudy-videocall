@@ -1,0 +1,54 @@
+{
+    "datetime": "2017-09-13 16:14:20.061344",
+    "experiment_time": 60,
+    "settings": [
+        {
+            "delay": 1,
+            "quantizer": 26
+        },
+        {
+            "delay": 30,
+            "quantizer": 26
+        },
+        {
+            "delay": 15,
+            "quantizer": 26
+        },
+        {
+            "delay": 60,
+            "quantizer": 40
+        },
+        {
+            "delay": 15,
+            "quantizer": 40
+        },
+        {
+            "delay": 1,
+            "quantizer": 33
+        },
+        {
+            "delay": 1,
+            "quantizer": 40
+        },
+        {
+            "delay": 30,
+            "quantizer": 33
+        },
+        {
+            "delay": 60,
+            "quantizer": 33
+        },
+        {
+            "delay": 60,
+            "quantizer": 26
+        },
+        {
+            "delay": 15,
+            "quantizer": 33
+        },
+        {
+            "delay": 30,
+            "quantizer": 40
+        }
+    ]
+}
