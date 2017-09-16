@@ -5,17 +5,17 @@ import statsmodels.api as sm
 
 data = np.loadtxt('salsify-user-study-webcam.csv', delimiter=',')
 
-y = data[:,3]
+y = data[:,4]
 
-dmin, dmax = min(data[:,0]), max(data[:,0])
-data[:,0] = (data[:,0] - dmin) / (dmax - dmin)
+dmin, dmax = min(data[:,1]), max(data[:,1])
+data[:,1] = (data[:,1] - dmin) / (dmax - dmin)
 
-dmin, dmax = min(data[:,2]), max(data[:,2])
-data[:,2] = (data[:,2] - dmin) / (dmax - dmin)
+dmin, dmax = min(data[:,3]), max(data[:,3])
+data[:,3] = (data[:,3] - dmin) / (dmax - dmin)
 
 #x = data[:,0]
 #x = data[:,2]
-x = data[:,0:3:2]
+x = data[:,1:4:2]
 x = sm.add_constant(x)
 
 results = sm.OLS(endog=y, exog=x).fit()
@@ -36,6 +36,7 @@ for i in range(len(y)):
         one_off_count += 1
 
 print('total', len(y))
-print('exact', exact_count)
-print('off_by_one', one_off_count)
-    
+print('exact', exact_count, exact_count/len(y))
+print('off_by_one', one_off_count, one_off_count/len(y))
+print('less_than_equal_one', exact_count+one_off_count, (exact_count+one_off_count)/len(y))
+
