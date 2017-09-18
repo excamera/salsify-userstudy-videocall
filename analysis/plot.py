@@ -114,11 +114,13 @@ y = data[:,4]
 
 print('plotting delay')
 x = data[:,1]
+plot_delay(x, y, 'delay.png')
 plot_delay(x, y, 'delay.svg')
 
 
 print('plotting quality')
 x = data[:,3]
+plot_quality(x, y, 'quality.png')
 plot_quality(x, y, 'quality.svg')
 
 #x = data[:,1:4:2]
