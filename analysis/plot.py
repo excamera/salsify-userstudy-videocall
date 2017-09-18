@@ -22,7 +22,7 @@ def plot_delay(xx, yy, name):
     for i in [1,15,30,60]:
         select_y = []
         for j in range(len(xx)):
-            if xx[j] == i:
+            if xx[j] == 33*i:
                 select_y.append(yy[j])
 
         mean.append( np.mean(select_y) )
@@ -37,16 +37,16 @@ def plot_delay(xx, yy, name):
     
     # ax = sns.tsplot(data=y, time=x, unit=u, err_style="ci_bars", interpolate=False)
 
-    plt.axis([-5, 65, 0.75, 5.25])
+    plt.axis([-100, 2100, 0.75, 5.25])
     plt.title('Delay v. QoE Score')
     plt.ylabel('QoE score')
-    plt.xlabel('Delay (# frames)')
+    plt.xlabel('Delay (milliseconds)')
     
-    p = plt.errorbar([1,15,30,60], mean, yerr=list(map(lambda x :x, std)),
+    p = plt.errorbar(list(map(lambda x: 33*x,[1,15,30,60])), mean, yerr=list(map(lambda x :x, std)),
                      fmt='o', color='k', ecolor='k', capsize=2, capthick=2, lw=2,
                      label='mean ± std')
 
-    x = [-4,64]
+    x = [0, 2050]
     y = [results.params[0] + x[0]*results.params[1], results.params[0] + x[1]*results.params[1]]
     
     #plt.text(34.85, 4.80, 'mean and +/- stddev plotted')
@@ -56,7 +56,8 @@ def plot_delay(xx, yy, name):
     #plt.legend()
     patch = mpatches.Patch(color='white', label='R² = ' + str(round(results.rsquared,2)))
     #plt.legend([p,pp[0]], ['mean ± std', 'regression line'])
-    plt.legend(handles=[p, pp[0], patch], labels=['mean ± std', 'regression line', 'R² = ' + str(round(results.rsquared,3))])
+    plt.legend(handles=[p, pp[0], patch], labels=['mean ± std', '-x/'+str(round(-1/results.params[1],2))+' + ' + str(round(results.params[0],2)), 'R² = ' + str(round(results.rsquared,3))])
+    #plt.legend(handles=[p, pp[0], patch], labels=['mean ± std', 'regression line', 'R² = ' + str(round(results.rsquared,3))])
     #    plt.legend([p,pp[0]], ['mean ± std', 'regression line'])
     
     #plt.show()
@@ -84,7 +85,7 @@ def plot_quality(xx, yy, name):
     
     plt.title('Visual Quality v. QoE Score')
     plt.ylabel('QoE score')
-    plt.xlabel('Visual Quality (SSIM)')
+    plt.xlabel('Visual Quality (dB SSIM)')
     plt.axis([9, 19, 0.75, 5.25])
 
     x = [9.5,18.5]
@@ -93,7 +94,8 @@ def plot_quality(xx, yy, name):
 
     patch = mpatches.Patch(color='white', label='R² = ' + str(round(results.rsquared,2)))
     #plt.legend([p,pp[0]], ['mean ± std', 'regression line'])
-    plt.legend(handles=[p, pp[0], patch], labels=['mean ± std', 'regression line', 'R² = ' + str(round(results.rsquared,3))])
+    plt.legend(handles=[p, pp[0], patch], labels=['mean ± std', str(round(results.params[1],2))+'x + ' + str(round(results.params[0],2)), 'R² = ' + str(round(results.rsquared,3))])
+    #plt.legend(handles=[p, pp[0], patch], labels=['mean ± std', 'regression line', 'R² = ' + str(round(results.rsquared,3))])
     #plt.legend([p,pp[0]], ['mean ± std', 'regression line'])
 
     #plt.scatter(xx,yy)
@@ -113,7 +115,7 @@ data = np.loadtxt('salsify-user-study-webcam.csv', delimiter=',')
 y = data[:,4]
 
 print('plotting delay')
-x = data[:,1]
+x = 33*data[:,1]
 plot_delay(x, y, 'delay.png')
 plot_delay(x, y, 'delay.svg')
 
