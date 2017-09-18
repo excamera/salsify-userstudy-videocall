@@ -198,22 +198,21 @@ for qq,color in zip(q,[(.75,.75,.75),'k',(.75,.75,.75)]):
 #print(mean, std)
 
 patch = mpatches.Patch(color='white', label='R² = ' + str(round(results.rsquared,2)))
-#plt.legend([p,pp[0]], ['mean ± std', 'regression line'])
 plt.legend(handles=[p, lines[1][0], patch], labels=['mean ± std', '-x/'+str(round(-1/results.params[1],2))+' + ' + str(round(results.params[0] + q[1]*results.params[2],2)), 'R² = ' + str(round(results.rsquared,3))])
 
 # add labels for the groupings
 c = 5.6
-plt.plot([-60,150],[c,c],'k-',lw=1)
-plt.plot([-60,-60],[c,c-.1],'k-',lw=1)
-plt.plot([150,150],[c,c-.1],'k-',lw=1)
+plt.plot([-60,150],[c,c],lw=1,color=(0,0,0))
+plt.plot([-60,-60],[c,c-.1],lw=1,color=(0,0,0))
+plt.plot([150,150],[c,c-.1],lw=1,color=(0,0,0))
 
-plt.text(-80, c+.15, 'dB SSIM', fontsize=10)
+plt.text(-80, c+.15, 'dB SSIM', fontsize=10, color=(0,0,0))
 
 plt.yticks([1,2,3,4,5])
 plt.xticks([33,500,1000,2000])
 
 plt.axis([-100, 2100, 0.75, 6.25])
-plt.title('Delay v. QoE Score')
+plt.title('QoE User Study (Video Call)')
 plt.ylabel('QoE score')
 plt.xlabel('Delay (milliseconds)')
 plt.savefig('delay.png')
