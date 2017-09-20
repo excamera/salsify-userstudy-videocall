@@ -7,19 +7,21 @@ data = np.loadtxt('salsify-user-study-webcam.csv', delimiter=',')
 
 y = data[:,4]
 
-dmin, dmax = min(data[:,1]), max(data[:,1])
-data[:,1] = (data[:,1] - dmin) / (dmax - dmin)
+# dmin, dmax = min(data[:,1]), max(data[:,1])
+# data[:,1] = (data[:,1] - dmin) / (dmax - dmin)
 
-dmin, dmax = min(data[:,3]), max(data[:,3])
-data[:,3] = (data[:,3] - dmin) / (dmax - dmin)
+# dmin, dmax = min(data[:,3]), max(data[:,3])
+# data[:,3] = (data[:,3] - dmin) / (dmax - dmin)
 
-#x = data[:,0]
-#x = data[:,2]
+#x = data[:,1]
+#x = data[:,3]
 x = data[:,1:4:2]
+x[:,0] = 33*x[:,0] + 250
 x = sm.add_constant(x)
-
+print(x)
 results = sm.OLS(endog=y, exog=x).fit()
 
+print(results.params)
 print(results.summary())
 
 exact_count = 0

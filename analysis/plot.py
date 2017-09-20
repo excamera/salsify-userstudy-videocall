@@ -145,14 +145,14 @@ y = data[:,4]
 #plot_quality(x, y, 'quality.svg')
 
 x = data[:,1:4:2]
-x[:,0] = 33*x[:,0]
+x[:,0] = 33*x[:,0] + 250
 x = sm.add_constant(x)
 results = sm.OLS(endog=y, exog=x).fit()
 print(results.params)
 print(results.summary())
 
 # groupings
-centers = [33,500,1000,2000]
+centers = [250,750,1250,2250]
 
 mean, std = [],[]
 for delay in [33, 495, 990, 1980]:
@@ -162,7 +162,7 @@ for delay in [33, 495, 990, 1980]:
     for quality in [10, 14, 18]:
         select_y = []
         for j in range(len(y)):
-            if abs(x[j,1] - delay)<0.1 and abs(x[j,2] - quality) < 2:
+            if abs(x[j,1] - delay - 250)< 50 and abs(x[j,2] - quality) < 2:
                 select_y.append(y[j])
             
         mean_.append( np.mean(select_y) )
@@ -172,25 +172,28 @@ for delay in [33, 495, 990, 1980]:
     std.append(std_)
 
 first = True
+ebar = []
 padding = [-66,0,66]
 for c,m,s in zip(centers, mean, std):
-    for p_,m_,s_,q in zip(padding, m, s,[10,14,18]):
+    for p_,m_,s_,q,color in zip(padding, m, s,[10,14,18],['#4c72b0', '#55a868', '#c44e52']):
 
-        p = plt.errorbar([c+p_], [m_], yerr=[s_],
-                         fmt='s', color='k', ecolor='k', capsize=2, capthick=2, lw=2,
+        plot = plt.errorbar([c+p_], [m_], yerr=[s_],
+                         fmt='s', color=color, ecolor=color, capsize=2, capthick=2, lw=2,
                          label='mean ± std')
 
         if first:
-            plt.text(c+p_-40, m_+s_+0.15,str(q), fontsize=9)
+            plt.text(c+p_-40, m_+s_+0.15,str(q), fontsize=9,color=color)
 
+        ebar.append(plot)
+        
     if first:
         first = False
         
 # lines of best fit
 q = [10, 14, 18]
-x = [0, 2050]
+x = [0, 2500]
 lines = []
-for qq,color in zip(q,[(.75,.75,.75),'k',(.75,.75,.75)]):
+for qq,color in zip(q,['#4c72b0', '#55a868', '#c44e52']):
     y = [results.params[0] + x[0]*results.params[1] + qq*results.params[2], results.params[0] + x[1]*results.params[1] + qq*results.params[2]]
     pp = plt.plot(x, y, color=color,label='regression line')
     lines.append(pp)
@@ -198,23 +201,25 @@ for qq,color in zip(q,[(.75,.75,.75),'k',(.75,.75,.75)]):
 #print(mean, std)
 
 patch = mpatches.Patch(color='white', label='R² = ' + str(round(results.rsquared,2)))
-plt.legend(handles=[p, lines[1][0], patch], labels=['mean ± std', '-x/'+str(round(-1/results.params[1],2))+' + ' + str(round(results.params[0] + q[1]*results.params[2],2)), 'R² = ' + str(round(results.rsquared,3))])
+#plt.legend(handles=[p, lines[1][0], patch], labels=['mean ± std', '-x/'+str(round(-1/results.params[1],2))+' + ' + str(round(results.params[0] + q[1]*results.params[2],2)), 'R² = ' + str(round(results.rsquared,3))])
+plt.legend(handles=[ebar[1], lines[1][0], patch], labels=['mean ± std', 'best-fit QoE model', 'R² = ' + str(round(results.rsquared,3))])
 
 # add labels for the groupings
 c = 5.6
-plt.plot([-60,150],[c,c],lw=1,color=(0,0,0))
-plt.plot([-60,-60],[c,c-.1],lw=1,color=(0,0,0))
-plt.plot([150,150],[c,c-.1],lw=1,color=(0,0,0))
+x = 150
+plt.plot([x,x+210],[c,c],lw=1,color=(0.33,0.33,0.33))
+plt.plot([x,x],[c,c-.1],lw=1,color=(0.33,0.33,0.33))
+plt.plot([x+210,x+210],[c,c-.1],lw=1,color=(0.33,0.33,0.33))
 
-plt.text(-80, c+.15, 'dB SSIM', fontsize=10, color=(0,0,0))
+plt.text(x-50, c+.15, 'dB SSIM', fontsize=10, color=(0,0,0))
 
 plt.yticks([1,2,3,4,5])
-plt.xticks([33,500,1000,2000])
+plt.xticks([250,750,1250,2250])
 
-plt.axis([-100, 2100, 0.75, 6.25])
-plt.title('QoE User Study (Video Call)')
+plt.axis([-100, 2600, 0.75, 6.25])
+#plt.title('QoE User Study (Video Call)')
 plt.ylabel('QoE score')
-plt.xlabel('Delay (milliseconds)')
+plt.xlabel('Video Delay (ms)')
 plt.savefig('delay.png')
 plt.savefig('delay.svg')
 

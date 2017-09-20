@@ -1,0 +1,3 @@
+#!/bin/bash
+
+inkscape delay.svg --export-pdf=delay.pdf 
