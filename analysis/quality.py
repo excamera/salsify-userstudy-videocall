@@ -12,7 +12,7 @@ import matplotlib.patches as mpatches
 # sns.set(color_codes=True)
 # sns.set_style("white")
 
-matplotlib.rcParams.update({'font.size': 15})
+matplotlib.rcParams.update({'font.size': 18})
 plt.figure(figsize=(10,5))
 
 data = np.loadtxt('salsify-user-study-webcam.csv', delimiter=',')
@@ -72,17 +72,21 @@ padding = [-0.5,-0.125,0.125,0.5]
 count = 0
 for q,m,s in zip(qualities, mean, std):
     c = q
-    for p_,m_,s_,d,color in zip(padding, m, s,[100,300,550,1050],['#4c72b0', '#55a868', '#c44e52', '#8172b2']):
+    for p_,m_,s_,d,color in zip(padding, m, s,[300,1200,2200,4200],['#4c72b0', '#55a868', '#c44e52', '#8172b2']):
 
         plot = plt.errorbar([c+p_], [m_], yerr=[s_],
-                         fmt='s', color=color, ecolor=color, capsize=2, capthick=2, lw=2,
+                         fmt='s', color=color, ecolor=color, capsize=6, capthick=2, lw=3,
                          label='mean ± std')
 
         if count == 2:
-            if d != 1050:
-                plt.text(c+p_-.12, m_+s_+0.19,str(d), fontsize=9,color=color)
+            if d == 300:
+                plt.text(c+p_-.20, m_+s_+0.18,str(d), fontsize=12,color=color)
+            elif d == 1200:
+                plt.text(c+p_-.25, m_+s_+0.24,str(d), fontsize=12,color=color)
+            elif d == 2200:
+                plt.text(c+p_-.15, m_+s_+0.15,str(d), fontsize=12,color=color)                
             else:
-                plt.text(c+p_-.15, m_+s_+0.19,str(d), fontsize=9,color=color)
+                plt.text(c+p_-.25, m_+s_+0.18,str(d), fontsize=12,color=color)
 
         ebar.append(plot)
 
@@ -98,23 +102,24 @@ x = [9.25, 18.75]
 lines = []
 for dd,color in zip(d,['#4c72b0', '#55a868', '#c44e52', '#8172b2']):
     y = [results.params[0] + x[0]*results.params[2] + dd*results.params[1], results.params[0] + x[1]*results.params[2] + dd*results.params[1]]
-    pp = plt.plot(x, y, color=color,label='regression line')
+    pp = plt.plot(x, y, color=color,label='regression line', lw=2)
     lines.append(pp)
     
 #print(mean, std)
 
 patch = mpatches.Patch(color='white', label='R² = ' + str(round(results.rsquared,2)))
 #plt.legend(handles=[p, lines[1][0], patch], labels=['mean ± std', '-x/'+str(round(-1/results.params[1],2))+' + ' + str(round(results.params[0] + q[1]*results.params[2],2)), 'R² = ' + str(round(results.rsquared,3))])
-plt.legend(handles=[ebar[1], lines[1][0], patch], labels=['mean ± std', 'best-fit QoE model', 'R² = ' + str(round(results.rsquared,3))])
+#plt.legend(handles=[ebar[1], lines[1][0], patch], labels=['mean ± std', 'best-fit QoE model', 'R² = ' + str(round(results.rsquared,3))])
+plt.legend(handles=[ebar[1], lines[1][0]], labels=['mean ± std', 'best-fit QoE model'])
 
 # add labels for the groupings
 c = 5.80
 x = 17.25
-plt.plot([x,x+1.5],[c,c],lw=1,color=(0.33,0.33,0.33))
-plt.plot([x,x],[c,c-.1],lw=1,color=(0.33,0.33,0.33))
-plt.plot([x+1.5,x+1.5],[c,c-.1],lw=1,color=(0.33,0.33,0.33))
+plt.plot([x,x+1.5],[c,c],lw=2,color=(0.33,0.33,0.33))
+plt.plot([x,x],[c,c-.1],lw=2,color=(0.33,0.33,0.33))
+plt.plot([x+1.5,x+1.5],[c,c-.1],lw=2,color=(0.33,0.33,0.33))
 
-plt.text(x-.05, c+.175, 'Video Delay (ms)', fontsize=12, color=(0,0,0))
+plt.text(x-.3, c+.175, 'Video Delay (ms)', fontsize=15, color=(0,0,0))
 
 plt.yticks([1,2,3,4,5])
 #plt.xticks(list(map(lambda x: 66*x+250, [1,15,30,60])))

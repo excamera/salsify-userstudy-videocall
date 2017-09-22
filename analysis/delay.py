@@ -12,7 +12,7 @@ import matplotlib.patches as mpatches
 # sns.set(color_codes=True)
 # sns.set_style("white")
 
-matplotlib.rcParams.update({'font.size': 15})
+matplotlib.rcParams.update({'font.size': 18})
 plt.figure(figsize=(10,5))
 
 data = np.loadtxt('salsify-user-study-webcam.csv', delimiter=',')
@@ -65,17 +65,17 @@ for d in delays:
 
 first = True
 ebar = []
-padding = [-100,0,100]
+padding = [-125,0,125]
 for d,m,s in zip(delays, mean, std):
     c = 66*d + 250
     for p_,m_,s_,q,color in zip(padding, m, s,[10,14,18],['#4c72b0', '#55a868', '#c44e52']):
 
         plot = plt.errorbar([c+p_], [m_], yerr=[s_],
-                         fmt='s', color=color, ecolor=color, capsize=2, capthick=2, lw=2,
+                         fmt='s', color=color, ecolor=color, capsize=6, capthick=2, lw=3,
                          label='mean ± std')
 
         if first:
-            plt.text(c+p_-40, m_+s_+0.15,str(q), fontsize=9,color=color)
+            plt.text(c+p_-70, m_+s_+0.15,str(q), fontsize=12,color=color)
 
         ebar.append(plot)
         
@@ -89,7 +89,7 @@ x = [0, 4500]
 lines = []
 for qq,color in zip(q,['#4c72b0', '#55a868', '#c44e52']):
     y = [results.params[0] + x[0]*results.params[1] + qq*results.params[2], results.params[0] + x[1]*results.params[1] + qq*results.params[2]]
-    pp = plt.plot(x, y, color=color,label='regression line')
+    pp = plt.plot(x, y, color=color,label='regression line',lw=2)
     lines.append(pp)
     
 #print(mean, std)
@@ -100,12 +100,12 @@ plt.legend(handles=[ebar[1], lines[1][0], patch], labels=['mean ± std', 'best-f
 
 # add labels for the groupings
 c = 3
-x = 125
-plt.plot([x,x+450],[c,c],lw=1,color=(0.33,0.33,0.33))
-plt.plot([x,x],[c,c+.1],lw=1,color=(0.33,0.33,0.33))
-plt.plot([x+450,x+450],[c,c+.1],lw=1,color=(0.33,0.33,0.33))
+x = 105
+plt.plot([x,x+490],[c,c],lw=2,color=(0.33,0.33,0.33))
+plt.plot([x,x],[c,c+.1],lw=2,color=(0.33,0.33,0.33))
+plt.plot([x+490,x+490],[c,c+.1],lw=2,color=(0.33,0.33,0.33))
 
-plt.text(x-60, c-.55, 'Video Quality\n  (SSIM dB)', fontsize=12, color=(0,0,0))
+plt.text(x-100, c-.65, 'Video Quality\n  (SSIM dB)', fontsize=15, color=(0,0,0))
 
 plt.yticks([1,2,3,4,5])
 #plt.xticks(list(map(lambda x: 66*x+250, [1,15,30,60])))
