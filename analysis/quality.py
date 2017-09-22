@@ -84,7 +84,7 @@ for q,m,s in zip(qualities, mean, std):
             else:
                 plt.text(c+p_-.15, m_+s_+0.19,str(d), fontsize=9,color=color)
 
-    ebar.append(plot)
+        ebar.append(plot)
 
     count += 1
         
