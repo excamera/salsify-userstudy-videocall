@@ -1,3 +1,4 @@
 #!/bin/bash
 
-inkscape delay.svg --export-pdf=delay.pdf 
+inkscape delay.svg --export-pdf=delay.pdf
+inkscape quality.svg --export-pdf=qualtiy.pdf 
