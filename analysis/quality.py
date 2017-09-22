@@ -12,8 +12,9 @@ import matplotlib.patches as mpatches
 # sns.set(color_codes=True)
 # sns.set_style("white")
 
-matplotlib.rcParams.update({'font.size': 18})
-plt.figure(figsize=(10,5))
+matplotlib.rcParams.update({'font.size': 20})
+matplotlib.rcParams.update({'font.family': 'arial'})
+f,a = plt.subplots(figsize=(10,5))
 
 data = np.loadtxt('salsify-user-study-webcam.csv', delimiter=',')
 
@@ -68,7 +69,7 @@ print(mean,std)
 qualities = [10, 14, 18]
 first = True
 ebar = []
-padding = [-0.5,-0.125,0.125,0.5]
+padding = [-0.375,-0.125,0.125,0.375]
 count = 0
 for q,m,s in zip(qualities, mean, std):
     c = q
@@ -78,15 +79,15 @@ for q,m,s in zip(qualities, mean, std):
                          fmt='s', color=color, ecolor=color, capsize=6, capthick=2, lw=3,
                          label='mean ± std')
 
-        if count == 2:
+        if count == 0:
             if d == 300:
-                plt.text(c+p_-.20, m_+s_+0.18,str(d), fontsize=12,color=color)
+                plt.text(c+p_-.195, m_+s_+0.075,str(d), fontsize=15,color=color)
             elif d == 1200:
-                plt.text(c+p_-.25, m_+s_+0.24,str(d), fontsize=12,color=color)
+                plt.text(c+p_-.395, m_-s_-0.29,str(d), fontsize=15,color=color)
             elif d == 2200:
-                plt.text(c+p_-.15, m_+s_+0.15,str(d), fontsize=12,color=color)                
+                plt.text(c+p_-.395, m_-s_-0.29,str(d), fontsize=15,color=color)                
             else:
-                plt.text(c+p_-.25, m_+s_+0.18,str(d), fontsize=12,color=color)
+                plt.text(c+p_-.1, m_+s_+0.075,str(d), fontsize=15,color=color)
 
         ebar.append(plot)
 
@@ -110,25 +111,31 @@ for dd,color in zip(d,['#4c72b0', '#55a868', '#c44e52', '#8172b2']):
 patch = mpatches.Patch(color='white', label='R² = ' + str(round(results.rsquared,2)))
 #plt.legend(handles=[p, lines[1][0], patch], labels=['mean ± std', '-x/'+str(round(-1/results.params[1],2))+' + ' + str(round(results.params[0] + q[1]*results.params[2],2)), 'R² = ' + str(round(results.rsquared,3))])
 #plt.legend(handles=[ebar[1], lines[1][0], patch], labels=['mean ± std', 'best-fit QoE model', 'R² = ' + str(round(results.rsquared,3))])
-plt.legend(handles=[ebar[1], lines[1][0]], labels=['mean ± std', 'best-fit QoE model'])
+#plt.legend(handles=[ebar[1], lines[1][0]], labels=['mean ± std', 'best-fit QoE model'])
 
 # add labels for the groupings
-c = 5.80
-x = 17.25
+c = 5.25
+x = 9.35
 plt.plot([x,x+1.5],[c,c],lw=2,color=(0.33,0.33,0.33))
 plt.plot([x,x],[c,c-.1],lw=2,color=(0.33,0.33,0.33))
 plt.plot([x+1.5,x+1.5],[c,c-.1],lw=2,color=(0.33,0.33,0.33))
 
-plt.text(x-.3, c+.175, 'Video Delay (ms)', fontsize=15, color=(0,0,0))
+plt.text(x+.75, c+.175, 'Video Delay (ms)', fontsize=15, color=(0,0,0),  horizontalalignment='center',)
 
 plt.yticks([1,2,3,4,5])
 #plt.xticks(list(map(lambda x: 66*x+250, [1,15,30,60])))
 plt.xticks([10,14,18])
 
-plt.axis([9,19, 0.75, 6.75])
+plt.axis([9,19, 0.5, 5.65])
 #plt.axis([-100, 20000, -20, 6.25])
 #plt.title('QoE User Study (Video Call)')
-plt.ylabel('QoE score', labelpad=10)
+
+a.spines['top'].set_visible(False)
+a.spines['right'].set_visible(False)
+a.get_xaxis().tick_bottom()
+a.get_yaxis().tick_left()
+
+plt.ylabel('QoE Score', labelpad=10)
 plt.xlabel('Video Quality (SSIM dB)', labelpad=10)
 plt.tight_layout()
 plt.savefig('quality.png')
